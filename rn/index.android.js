@@ -17,8 +17,18 @@ import {
 } from 'react-native';
 
 const Toast = NativeModules.MyToast;
+const Http = NativeModules.MyHttp;
 
 export default class rn extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      requestContent: 'please press the btn',
+      showLoading:false
+    };
+  } 
+
   render() {
     return (
       <View style={styles.container}>
@@ -45,7 +55,13 @@ export default class rn extends Component {
 }
 
 const onButtonPress = () => {
-  Toast.show("button click", Toast.SHORT);
+  //Toast.show("button clddick", Toast.SHORT);
+
+  Http.doRequest("https://api.github.com/users/github").then((json) => {
+      console.log('Contents: ' + json);
+    }).catch(error => {
+      console.error('出错了', error);
+  });
 };
 
 const window=Dimensions.get('window');
