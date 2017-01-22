@@ -57,10 +57,17 @@ public class MyHttp extends ReactContextBaseJavaModule {
             Request build = new Request.Builder().url(params[0]).build();
             try {
                 Response response = client.newCall(build).execute();
-                result = response.body().string();
-                return params[0];
-            } catch (IOException e) {
+                if (response != null) {
+                    Log.d(TAG, "response body:" + (response.body() == null) );
+                    result = response.body().string();
+                } else {
+                    result = "";
+                }
+                return result;
+            } catch (Exception e) {
                 e.printStackTrace();
+                result = "";
+                Log.d(TAG, e.getMessage());
                 return e.getMessage();
             }
         }
@@ -68,8 +75,13 @@ public class MyHttp extends ReactContextBaseJavaModule {
         @Override
         protected void onPostExecute(String s) {
             Log.d(TAG, "onPostExecute invoke:" + result);
+            if (result.isEmpty()){
+                mPromise.reject(new Error("net::ERR_CONNECTION_TIMED_OUT"));
 
-            mPromise.resolve(result);
+            } else {
+                mPromise.resolve(result);
+            }
+           
 
             super.onPostExecute(s);
         }
