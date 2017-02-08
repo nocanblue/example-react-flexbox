@@ -15,17 +15,17 @@ class App extends Component {
   // {this.renderBtn('有效请求', this.handlerValid)}
   // {this.renderBtn('无效请求', this.handlerInvaid)}
   render() {
-    console.log("----render---")
+    console.log("----render---. props => ", this.props)
     return (
         <div>
-          {(this.state.showLoading)?
+          {(this.props.showLoading111)?
             <div className="container">
               <Loading/>
             </div>
             : null}
           <div className="App">
             <div className="App-header">
-              <Content value={this.state.requestContent} />
+              <Content value={this.props.text22} />
             </div>
             <div>
               {this.renderBtn('有效请求', () => this.handlerValid())}
@@ -63,13 +63,19 @@ class App extends Component {
 
 
   handlerValid() {
-    this.setState({ requestContent: "loading....",showLoading:true });
+
+    console.info("this.props => ", this.props);
+    this.props.onRequest("hhhh","loading...");
+
+    //this.setState({ requestContent: "loading....",showLoading:true });
     //debugger;
     this.getJSON("https://api.github.com/users/github").then((json) => {
-      this.setState({ requestContent: json,showLoading:false });
+      //this.setState({ requestContent: json,showLoading:false });
+      this.props.onResponseOK(json);
       console.log('Contents: ' + json);
     }).catch(error => {
-      this.setState({ requestContent: "出错了",showLoading:false });
+      //this.setState({ requestContent: "出错了",showLoading:false });
+      this.props.onResponseExcept(error);
       console.error('出错了', error);
     });
 
@@ -77,13 +83,16 @@ class App extends Component {
 
 
   handlerInvaid() {
-    this.setState({ requestContent: "loading...." ,showLoading:true });
+    //this.setState({ requestContent: "loading...." ,showLoading:true });
+    this.props.onRequest("hhhh","loading...");
     this.getJSON("https://baiduxxxx.com").then((json) => {
-      this.setState({ requestContent: json,showLoading:false });
+      //this.setState({ requestContent: json,showLoading:false });
+      this.props.onResponseOK(json);
       console.log('Contents: ' + json);
     }).catch(error => {
         console.log("Error", error.message);
-       this.setState({ requestContent: error.message,showLoading:false });
+         this.props.onResponseExcept(error.message);
+       //this.setState({ requestContent: error.message,showLoading:false });
     });
   }
 }
