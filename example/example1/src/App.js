@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+
 class App extends Component {
 
   constructor() {
@@ -65,7 +66,7 @@ class App extends Component {
   handlerValid() {
 
     console.info("this.props => ", this.props);
-    this.props.onRequest("hhhh","loading...");
+    this.props.onRequest("loading...");
 
     //this.setState({ requestContent: "loading....",showLoading:true });
     //debugger;
@@ -75,7 +76,7 @@ class App extends Component {
       console.log('Contents: ' + json);
     }).catch(error => {
       //this.setState({ requestContent: "出错了",showLoading:false });
-      this.props.onResponseExcept(error);
+      this.props.onResponseExcept(error.message);
       console.error('出错了', error);
     });
 
